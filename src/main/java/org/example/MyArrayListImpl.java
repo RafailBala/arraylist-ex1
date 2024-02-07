@@ -9,6 +9,7 @@ import java.util.Arrays;
  * @autor Рафаил Балаев
  */
 public class MyArrayListImpl<T extends Comparable<T>> implements MyArrayList<T> {
+    public static final String OUT_OF_BOUND_ERR_MSG = "Значение %d должно быть <= %d";
     private int size;
     private static final int DEFAULT_CAPACITY = 10;
     private Object[] objects;
@@ -42,19 +43,19 @@ public class MyArrayListImpl<T extends Comparable<T>> implements MyArrayList<T> 
             System.arraycopy(objects, index, objects, index + 1, size - index);
             objects[index] = element;
             size++;
-        } else throw new ArrayIndexOutOfBoundsException("Значение " + index + " должно быть <= " + size);
+        } else throw new ArrayIndexOutOfBoundsException(String.format(OUT_OF_BOUND_ERR_MSG, index, size));
     }
 
     public T get(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index " + index + " выходит за грань массива = " + size);
+            throw new IndexOutOfBoundsException("Index " + index + " выходит за грань массива = " + size); // форматирование как сверху
         }
         return (T) objects[index];
     }
 
     public void remove(T element) {
         for (int i = 0; i < size; i++) {
-            if (objects[i].equals(element)) {
+            if (objects[i].equals(element)) { // NPE если objects[i] == null
                 System.arraycopy(objects, i + 1, objects, i, size - i - 1);
                 objects[size--] = null;
             }
